@@ -1,18 +1,23 @@
-pipeline {
-    agent any
-    stages {
-        stage('Test') {
-            steps {
+stage('Build') {
+    /* .. snip .. */
+}
+
+stage('Test') {
+    parallel linux: {
+        node('linux') {
+            checkout scm
+            try {
+                unstash 'app'
                 sh 'make check'
             }
+            finally {
+                junit '**/target/*.xml'
+            }
         }
-    }
-    post {
-        always {
-            junit '**/target/*.xml'
-        }
-        failure {
-            mail to: team@example.com, subject: 'The Pipeline failed :('
+    },
+    windows: {
+        node('windows') {
+            /* .. snip .. */
         }
     }
 }
