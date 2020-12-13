@@ -1,15 +1,24 @@
 pipeline {
-    agent any
-
+    agent any 
+    environment {
+        // Using returnStdout
+        CC = """${sh(
+                returnStdout: true,
+                script: 'echo "clang"'
+            )}""" 
+        // Using returnStatus
+        EXIT_STATUS = """${sh(
+                returnStatus: true,
+                script: 'exit 1'
+            )}"""
+    }
     stages {
-        stage('Deploy') {
-            when {
-              expression {
-                currentBuild.result == null || currentBuild.result == 'SUCCESS' 
-              }
+        stage('Example') {
+            environment {
+                DEBUG_FLAGS = '-g'
             }
             steps {
-                sh 'make publish'
+                sh 'printenv'
             }
         }
     }
