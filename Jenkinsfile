@@ -1,11 +1,22 @@
-node {
-    checkout scm
+pipeline {
+   agent any
 
-    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-marty') {
-
-        def customImage = docker.build("masservices/docker")
-
-        /* Push the container to the custom Registry */
-        customImage.push()
-    }
+   stages {
+      stage('Build') {
+        steps {
+          echo 'Building...'
+          echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NODE_NAME} and JOB ${env.JOB_NAME}"
+        }
+   }
+   stage('Test') {
+     steps {
+        echo 'Testing...'
+     }
+   }
+   stage('Deploy') {
+     steps {
+       echo 'Deploying...'
+     }
+   }
+  }
 }
