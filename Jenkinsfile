@@ -1,23 +1,21 @@
-stage('Build') {
-    /* .. snip .. */
-}
+pipeline {
+    agent any
 
-stage('Test') {
-    parallel linux: {
-        node('linux') {
-            checkout scm
-            try {
-                unstash 'app'
-                sh 'make check'
-            }
-            finally {
-                junit '**/target/*.xml'
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
             }
         }
-    },
-    windows: {
-        node('windows') {
-            /* .. snip .. */
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
         }
     }
 }
